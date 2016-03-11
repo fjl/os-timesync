@@ -3,8 +3,4 @@ language: c
 os:
   - linux
   - osx
-before_build:
-  - node --version
-  - uname -a
-script:
-  - npm test
+script: npm test
