@@ -1,8 +1,10 @@
 sudo: false
-language: node_js
+language: c
 os:
   - linux
   - osx
-node_js:
-  - '0.12'
-  - '0.10'
+before_build:
+  - node --version
+  - uname -a
+script:
+  - npm test
