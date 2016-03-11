@@ -1,0 +1,16 @@
+environment:
+  nodejs_version: "0.10"
+
+# Install scripts. (runs after repo cloning)
+install:
+  # Get the latest stable version of Node.js or io.js
+  - ps: Install-Product node $env:nodejs_version
+
+# Post-install test scripts.
+test_script:
+  - node --version
+  - npm --version
+  - npm test
+
+# Don't actually build.
+build: off

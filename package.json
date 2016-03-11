@@ -1,0 +1,22 @@
+{
+  "name": "os-timesync",
+  "version": "1.0.0",
+  "description": "Check whether NTP time sync is enabled in OS settings.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fjl/os-timesync.git"
+  },
+  "keywords": [
+    "ntp"
+  ],
+  "author": "Felix Lange",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fjl/os-timesync/issues"
+  },
+  "homepage": "https://github.com/fjl/os-timesync#readme"
+}
