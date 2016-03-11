@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2016 Felix Lange <fjl@twurst.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -25,20 +25,13 @@ var childProcess = require("child_process");
 function checkWindows(cb) {
     var args = ["query", "HKLM\\SYSTEM\\CurrentControlSet\\Services\\W32Time", "/v", "Start"];
     childProcess.execFile("reg", args, function (err, stdout, stderr) {
-        stdout = stdout.toString().trim();
         cb(err, /REG_DWORD\s+0x3/.test(stdout));
     });
 }
 
 function checkDarwin(cb) {
-    childProcess.execFile("launchctl", ["print", "system/org.ntp.ntpd"], function (err, stdout, stderr) {
-        if (!err) {
-            cb(null, true);
-        } else if (err.code === 113) {
-            cb(null, false);
-        } else {
-            cb(err, false);
-        }
+    childProcess.execFile("ps", ["-A", "-o", "command"], function (err, stdout, stderr) {
+        cb(err, /^\/usr\/sbin\/ntpd/m.test(stdout));
     });
 }
 
