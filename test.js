@@ -23,10 +23,12 @@ var assert = require("assert");
 var timesync = require("./index.js");
 
 timesync.checkEnabled(function (err, status) {
+    console.log("canCheck =", timesync.canCheck);
     if (!timesync.canCheck) {
         assert(err !== null, "error should be non-null on unsupported platforms");
     } else {
         assert.ifError(err);
-        assert(typeof status === "boolean", "status should be a boolean")
+        assert(typeof status === "boolean", "status should be a boolean");
+        console.log("enabled = ", status);
     }
 });

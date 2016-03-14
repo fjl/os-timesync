@@ -21,8 +21,8 @@
 
 var childProcess = require("child_process");
 
-// Check https://technet.microsoft.com/en-us/library/cc773263(v=ws.10).aspx for more info.
 function checkWindows(cb) {
+    // See https://technet.microsoft.com/en-us/library/cc773263(v=ws.10).aspx for more info.
     var args = ["query", "HKLM\\SYSTEM\\CurrentControlSet\\Services\\W32Time", "/v", "Start"];
     childProcess.execFile("reg", args, function (err, stdout, stderr) {
         cb(err, /REG_DWORD\s+0x3/.test(stdout));
@@ -35,10 +35,24 @@ function checkBSD(cb) {
     });
 }
 
+function checkSystemd(cb) {
+    childProcess.execFile("timedatectl", ["status"], function (err, stdout, stderr) {
+        if (err) {
+            return cb(err, false);
+        }
+        var match = /^\s*ntp enabled: (yes|no)\s*$/mi.exec(stdout);
+        if (!match) {
+            err = new Error("can't find 'ntp enabled:' line in timedatectl output");
+            return cb(err, false);
+        }
+        cb(null, match[1].toString().toLowerCase() === "yes");
+    });
+}
+
 /**
  * canCheck is true if checkEnabled is supported on the current platform.
  */
-exports.canCheck = ["win32", "freebsd", "darwin"].indexOf(process.platform) > -1;
+exports.canCheck = ["win32", "freebsd", "darwin", "linux"].indexOf(process.platform) > -1;
 
 /**
  * checkEnabled invokes {cb} with {(error, enabled)} after checking whether
@@ -51,6 +65,8 @@ exports.checkEnabled = function checkEnabled(cb) {
     case "darwin":
     case "freebsd":
         return checkBSD(cb);
+    case "linux":
+        return checkSystemd(cb);
     default:
         var err = new Error("checkEnabled is not supported on " + process.platform);
         process.nextTick(cb, err);
