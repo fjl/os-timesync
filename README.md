@@ -2,7 +2,7 @@
 [![AppVeyor](https://ci.appveyor.com/api/projects/status/y9turyxri81u35ih?svg=true)](https://ci.appveyor.com/project/fjl/os-timesync)
 
 `os-timesync` can help you check whether NTP time sync is enabled in OS settings.
-It can do so reliably on OS X and Windows.
+It can do so reliably on OS X and Windows and somewhat less reliably on Linux.
 
 ```js
 var timesync = require("os-timesync");
