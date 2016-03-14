@@ -38,7 +38,7 @@ function checkBSD(cb) {
 /**
  * canCheck is true if checkEnabled is supported on the current platform.
  */
-exports.canCheck = ["win32", "darwin"].indexOf(process.platform) > -1;
+exports.canCheck = ["win32", "freebsd", "darwin"].indexOf(process.platform) > -1;
 
 /**
  * checkEnabled invokes {cb} with {(error, enabled)} after checking whether
