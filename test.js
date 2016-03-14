@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2016 Felix Lange <fjl@twurst.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -31,6 +31,6 @@ timesync.checkEnabled(function (err, status) {
     } else {
         assert.ifError(err);
         assert(typeof status === "boolean", "status should be a boolean");
-        console.log("enabled = ", status);
+        console.log("enabled =", status);
     }
 });
