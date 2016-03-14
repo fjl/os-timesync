@@ -21,6 +21,7 @@
 
 var childProcess = require("child_process");
 
+// Check https://technet.microsoft.com/en-us/library/cc773263(v=ws.10).aspx for more info.
 function checkWindows(cb) {
     var args = ["query", "HKLM\\SYSTEM\\CurrentControlSet\\Services\\W32Time", "/v", "Start"];
     childProcess.execFile("reg", args, function (err, stdout, stderr) {
@@ -28,7 +29,7 @@ function checkWindows(cb) {
     });
 }
 
-function checkDarwin(cb) {
+function checkBSD(cb) {
     childProcess.execFile("ps", ["-A", "-o", "command"], function (err, stdout, stderr) {
         cb(err, /^\/usr\/sbin\/ntpd/m.test(stdout));
     });
@@ -49,7 +50,7 @@ exports.checkEnabled = function checkEnabled(cb) {
         return checkWindows(cb);
     case "darwin":
     case "freebsd":
-        return checkDarwin(cb);
+        return checkBSD(cb);
     default:
         var err = new Error("checkEnabled is not supported on " + process.platform);
         process.nextTick(cb, err);
