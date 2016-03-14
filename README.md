@@ -7,10 +7,12 @@ It can do so reliably on OS X and Windows.
 ```js
 var timesync = require("os-timesync");
 
-if (timesync.canCheck) {
-    timesync.checkEnabled(function (error, enabled) {
-        console.log("enabled =", enabled);
-    });
-}
+timesync.checkEnabled(function (err, enabled) {
+    if (err) {
+        console.log("can't check: " + err.toString());
+        return;
+    }
+    console.log("enabled =", enabled);
+});
 ```
 
