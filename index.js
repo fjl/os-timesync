@@ -19,7 +19,6 @@
  * THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-var os = require("os");
 var childProcess = require("child_process");
 
 function checkWindows(cb) {
@@ -38,20 +37,20 @@ function checkDarwin(cb) {
 /**
  * canCheck is true if checkEnabled is supported on the current platform.
  */
-exports.canCheck = ["Windows_NT", "Darwin"].indexOf(os.type()) > -1;
+exports.canCheck = ["win32", "darwin"].indexOf(process.platform) > -1;
 
 /**
  * checkEnabled invokes {cb} with {(error, enabled)} after checking whether
  * NTP time synchronization is enabled in OS settings.
  */
 exports.checkEnabled = function checkEnabled(cb) {
-    switch (os.type()) {
-    case "Windows_NT":
+    switch (process.platform) {
+    case "win32":
         return checkWindows(cb);
-    case "Darwin":
+    case "darwin":
         return checkDarwin(cb);
     default:
-        var err = new Error("checkEnabled is not supported on " + os.type());
-        process.nextTick(cb, err, false);
+        var err = new Error("checkEnabled is not supported on " + process.platform);
+        process.nextTick(cb, err);
     }
 }
