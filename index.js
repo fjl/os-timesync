@@ -48,6 +48,7 @@ exports.checkEnabled = function checkEnabled(cb) {
     case "win32":
         return checkWindows(cb);
     case "darwin":
+    case "freebsd":
         return checkDarwin(cb);
     default:
         var err = new Error("checkEnabled is not supported on " + process.platform);
