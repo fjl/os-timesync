@@ -19,6 +19,8 @@
  * THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+"use strict";
+
 var assert = require("assert");
 var timesync = require("./index.js");
 
