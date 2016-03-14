@@ -31,9 +31,9 @@ function checkWindows(cb) {
     });
 }
 
-function checkBSD(cb) {
+function checkNtpd(cb) {
     childProcess.execFile("ps", ["-A", "-o", "command"], function (err, stdout) {
-        cb(err, /^\/usr\/sbin\/ntpd/m.test(stdout));
+        cb(err, /^\/(usr\/)?s?bin\/ntpd/m.test(stdout));
     });
 }
 
@@ -48,6 +48,16 @@ function checkSystemd(cb) {
             return cb(err, false);
         }
         cb(null, match[1].toString().toLowerCase() === "yes");
+    });
+}
+
+function checkLinux(cb) {
+    checkSystemd(function (err, status) {
+        if (err.errno && err.errno === "ENOENT") {
+            // No timedatectl, fall back to checking for ntpd.
+            return checkNtpd(cb);
+        }
+        cb(err, status);
     });
 }
 
@@ -66,9 +76,9 @@ exports.checkEnabled = function checkEnabled(cb) {
         return checkWindows(cb);
     case "darwin":
     case "freebsd":
-        return checkBSD(cb);
+        return checkNtpd(cb);
     case "linux":
-        return checkSystemd(cb);
+        return checkLinux(cb);
     default:
         var err = new Error("checkEnabled is not supported on " + process.platform);
         process.nextTick(cb, err);
