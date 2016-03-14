@@ -53,7 +53,7 @@ function checkSystemd(cb) {
 
 function checkLinux(cb) {
     checkSystemd(function (err, status) {
-        if (err.errno && err.errno === "ENOENT") {
+        if (err && err.errno === "ENOENT") {
             // No timedatectl, fall back to checking for ntpd.
             return checkNtpd(cb);
         }
