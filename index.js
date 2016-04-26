@@ -42,9 +42,9 @@ function checkSystemd(cb) {
         if (err) {
             return cb(err, false);
         }
-        var match = /^\s*ntp enabled: (yes|no)\s*$/mi.exec(stdout);
+        var match = /^\s*ntp enabled: (yes)\s*$/mi.exec(stdout);
         if (!match) {
-            err = new Error("can't find 'ntp enabled:' line in timedatectl output");
+            err = new Error("NTP is not synchronized. Please enable it");
             return cb(err, false);
         }
         cb(null, match[1].toString().toLowerCase() === "yes");
