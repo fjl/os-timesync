@@ -42,8 +42,11 @@ function checkSystemd(cb) {
         if (err) {
             return cb(err, false);
         }
-        var match = /NTP enable: yes|NTP synchronized: yes/mi.exec(stdout);
-
+        var match = /NTP enable: yes|NTP synchronized: yes|Network time on: yes/mi.exec(stdout);
+        if (!match) {
+-            err = new Error("can't find 'NTP enabled: yes or 'NTP synchronized:  yes' or 'Network time on: yes' in timedatectl output");
+-            return cb(err, false);
+-        }
         cb(null, match !== null);
     });
 }
