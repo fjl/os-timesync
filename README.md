@@ -3,6 +3,7 @@
 
 `os-timesync` can help you check whether NTP time sync is enabled in OS settings.
 It can do so reliably on OS X and Windows and somewhat less reliably on Linux.
+Note that the result does not tell you whether the local time is accurate.
 
 ```js
 var timesync = require("os-timesync");
