@@ -27,7 +27,7 @@ function checkWindows(cb) {
     // See https://technet.microsoft.com/en-us/library/cc773263(v=ws.10).aspx for more info.
     var args = ["query", "HKLM\\SYSTEM\\CurrentControlSet\\Services\\W32Time", "/v", "Start"];
     childProcess.execFile("reg", args, function (err, stdout) {
-        cb(err, /REG_DWORD\s+0x3/.test(stdout));
+        cb(err, /REG_DWORD\s+0x[23]/.test(stdout));
     });
 }
 
