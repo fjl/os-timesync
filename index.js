@@ -23,22 +23,32 @@
 
 var childProcess = require("child_process");
 
+// execFile wraps child_process.execFile, ensuring that all errors are
+// returned through the callback.
+function execFile(prog, args, cb) {
+    try {
+        childProcess.execFile(prog, args, cb);
+    } catch (exn) {
+        process.nextTick(cb, exn);
+    }
+}
+
 function checkWindows(cb) {
     // See https://technet.microsoft.com/en-us/library/cc773263(v=ws.10).aspx for more info.
     var args = ["query", "HKLM\\SYSTEM\\CurrentControlSet\\Services\\W32Time", "/v", "Start"];
-    childProcess.execFile("reg", args, function (err, stdout) {
+    execFile("reg", args, function (err, stdout) {
         cb(err, /REG_DWORD\s+0x[23]/.test(stdout));
     });
 }
 
 function checkNtpd(cb) {
-    childProcess.execFile("ps", ["-A", "-o", "command"], function (err, stdout) {
+    execFile("ps", ["-A", "-o", "command"], function (err, stdout) {
         cb(err, /^\/(usr\/)?s?bin\/ntpd/m.test(stdout));
     });
 }
 
 function checkSystemd(cb) {
-    childProcess.execFile("timedatectl", ["status"], function (err, stdout) {
+    execFile("timedatectl", ["status"], function (err, stdout) {
         if (err) {
             return cb(err, false);
         }
