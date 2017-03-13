@@ -52,12 +52,12 @@ function checkSystemd(cb) {
         if (err) {
             return cb(err, false);
         }
-        var match = /^\s*(NTP enabled|Network time on): (yes|no)\s*$/mi.exec(stdout);
+        var match = /NTP enable: yes|NTP synchronized: yes|Network time on: yes/mi.exec(stdout);
         if (!match) {
-            err = new Error("can't find 'NTP enabled:' or 'Network time on:' in timedatectl output");
-            return cb(err, false);
-        }
-        cb(null, match[2].toString().toLowerCase() === "yes");
+-            err = new Error("can't find 'NTP enabled: yes or 'NTP synchronized:  yes' or 'Network time on: yes' in timedatectl output");
+-            return cb(err, false);
+-        }
+        cb(null, match !== null);
     });
 }
 
