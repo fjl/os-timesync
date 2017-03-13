@@ -52,7 +52,7 @@ function checkSystemd(cb) {
         if (err) {
             return cb(err, false);
         }
-        var match = /^\s*(NTP enabled|Network time on): (yes|no)\s*$/mi.exec(stdout);
+        var match = /^\s*(NTP enabled|Network time on|NTP synchronized): (yes|no)\s*$/mi.exec(stdout);
         if (!match) {
             err = new Error("can't find 'NTP enabled:' or 'Network time on:' in timedatectl output");
             return cb(err, false);
