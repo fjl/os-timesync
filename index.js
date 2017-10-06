@@ -22,6 +22,7 @@
 "use strict";
 
 var childProcess = require("child_process");
+var os = require("os");
 
 // execFile wraps child_process.execFile, ensuring that all errors are
 // returned through the callback.
@@ -71,16 +72,31 @@ function checkLinux(cb) {
     });
 }
 
+function canCheck() {
+    if (process.platform === "darwin") {
+        // We can't check on macOS High Sierra (10.13) because it handles
+        // time synchronization in the 'timed' process.
+        // See https://github.com/fjl/os-timesync/issues/6.
+        var v = parseInt(/\d+/.exec(os.release()), 10);
+        return v < 17;
+    }
+    return ["win32", "freebsd", "linux"].indexOf(process.platform) > -1;
+}
+
 /**
  * canCheck is true if checkEnabled is supported on the current platform.
  */
-exports.canCheck = ["win32", "freebsd", "darwin", "linux"].indexOf(process.platform) > -1;
+exports.canCheck = canCheck();
 
 /**
  * checkEnabled invokes {cb} with {(error, enabled)} after checking whether
  * NTP time synchronization is enabled in OS settings.
  */
 exports.checkEnabled = function checkEnabled(cb) {
+    if (!canCheck()) {
+        process.nextTick(cb, new Error("checkEnabled is not supported on this operating system"));
+        return;
+    }
     switch (process.platform) {
     case "win32":
         return checkWindows(cb);
@@ -89,8 +105,5 @@ exports.checkEnabled = function checkEnabled(cb) {
         return checkNtpd(cb);
     case "linux":
         return checkLinux(cb);
-    default:
-        var err = new Error("checkEnabled is not supported on " + process.platform);
-        process.nextTick(cb, err);
     }
 };
