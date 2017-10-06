@@ -1,6 +1,6 @@
 {
   "name": "os-timesync",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Check whether NTP time sync is enabled in OS settings.",
   "main": "index.js",
   "scripts": {
