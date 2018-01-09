@@ -44,7 +44,8 @@ function checkWindows(cb) {
 
 function checkNtpd(cb) {
     execFile("ps", ["-A", "-o", "command"], function (err, stdout) {
-        cb(err, /^\/(usr\/)?s?bin\/ntpd/m.test(stdout));
+        // ntpd -g -u ntpd:ntpd -n (on Void Linux) 
+        cb(err, /^(\/(usr\/)?s?bin\/|)ntpd/m.test(stdout));
     });
 }
 
