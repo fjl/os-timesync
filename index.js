@@ -53,9 +53,9 @@ function checkSystemd(cb) {
         if (err) {
             return cb(err, false);
         }
-        var match = /^\s*(NTP enabled|Network time on): (yes|no)\s*$/mi.exec(stdout);
+        var match = /^\s*(NTP enabled|Network time on|systemd-timesyncd.service active): (yes|no)\s*$/mi.exec(stdout);
         if (!match) {
-            err = new Error("can't find 'NTP enabled:' or 'Network time on:' in timedatectl output");
+            err = new Error("can't find 'NTP enabled:' or 'Network time on:' or 'systemd-timesyncd.service active' in timedatectl output");
             return cb(err, false);
         }
         cb(null, match[2].toString().toLowerCase() === "yes");
